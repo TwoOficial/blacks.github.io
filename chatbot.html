@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="logo.ico">
+        <title>Blacks Boutique</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+      </head>
+      
+<body class="bg-gray-50">
+
+
+   
+
+
+    
+
+
+    
+          <!-- Links en pantalla completa -->
+          <nav class="bg-white shadow-md">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div class="flex justify-between items-center h-16">
+          
+                <!-- Logo -->
+                <div class="text-2xl font-semibold tracking-wide text-black">
+                  BLACKS BOUTIQUE
+                </div>
+          
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8 text-black text-sm font-medium">
+                  <a href="inicio.html" class="hover:text-gray-600 transition">Inicio</a>
+                  <a href="mapa.html" class="hover:text-gray-600 transition">Mapa</a>
+          
+                  <!-- 🛒 Carrito Desktop -->
+                  <a href="carrito.html" class="relative hover:text-black" id="carrito-nav">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span id="carrito-count" class="absolute -top-2 -right-3 bg-black text-white text-xs px-1.5 py-0.5 rounded-full">0</span>
+                  </a>
+                </div>
+          
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                  <button id="menu-btn" class="text-black focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-black text-sm font-medium">
+              <a href="inicio.html" class="block hover:text-gray-600 transition">Inicio</a>
+              <a href="mapa.html" class="block hover:text-gray-600 transition">Mapa</a>
+          
+              <!-- 🛒 Carrito Mobile -->
+              <a href="carrito.html" class="relative inline-block hover:text-black" id="carrito-nav-mobile">
+                <i class="fas fa-shopping-cart text-xl"></i>
+                <span id="carrito-count-mobile" class="absolute -top-2 -right-3 bg-black text-white text-xs px-1.5 py-0.5 rounded-full">0</span>
+              </a>
+            </div>
+          </nav>
+        
+    <style>
+        /* Estilos adicionales */
+        .bot-message {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        .user-message {
+            background-color: #4caf50;
+            color: white;
+        }
+        /* Estilo para la imagen circular del bot */
+        .bot-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .bot-name {
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        @keyframes fadeInSmooth {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+          .animate-fade-in {
+            animation: fadeInSmooth 0.4s ease-out;
+          }
+          
+    </style>
+</head>
+<body class="bg-white text-black">
+
+    <div class="flex justify-center items-center min-h-screen bg-white">
+        <div class="w-full max-w-xl p-6 bg-white rounded-lg shadow-lg">
+            <div id="chatbox" class="space-y-4 h-96 overflow-y-scroll p-4 bg-gray-50 rounded-lg mb-4">
+                <!-- Los mensajes se mostrarán aquí -->
+            </div>
+            
+            <div class="flex">
+                <input id="userInput" type="text" placeholder="Escribe tu mensaje..." class="flex-1 p-2 border border-gray-300 rounded-md" />
+                <button onclick="enviarMensaje()" class="ml-2 px-4 py-2 bg-black text-white rounded-md hover:bg-black">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+<script>
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  menuBtn?.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+  });
+
+  const respuestas = {
+    saludo: "¡Hola! Soy Blake 🤖, tu asistente en Blacks Boutique. ¿Cómo puedo ayudarte hoy?",
+    horario: "🕒 Nuestro horario es de lunes a viernes de 10:00 AM a 6:00 PM.",
+    accesorios: "🎁 Claro, tenemos accesorios para hombre y mujer. Mira esto:",
+    sucursal: "📍 Tenemos 3 sucursales: Sur, Norte y Central. ¿Cuál te interesa conocer?",
+    sucursalSur: "🏬 Sucursal Sur: Calle Sur 123, Ciudad Sur. <a href='mapa.html' class='text-blue-600 underline' target='_blank'>Ver en mapa</a>",
+    sucursalNorte: "🏬 Sucursal Norte: Calle Norte 456, Ciudad Norte. <a href='mapa.html' class='text-blue-600 underline' target='_blank'>Ver en mapa</a>",
+    sucursalCentral: "🏬 Sucursal Central: Calle Principal 789, Ciudad Central. <a href='mapa.html' class='text-blue-600 underline' target='_blank'>Ver en mapa</a>",
+    pago: "💳 Puedes realizar pagos mediante transferencia bancaria a nuestra cuenta BBVA o con tarjeta en tienda.",
+    contacto: "📞 Puedes contactarnos por WhatsApp: <a href='https://wa.me/529876543210' class='text-green-600 underline' target='_blank'>529876543210</a> o por Instagram: <a href='https://instagram.com/blacksboutique' class='text-pink-600 underline' target='_blank'>@blacksboutique</a>",
+    error: "😅 Aún no entiendo esa pregunta. Prueba con algo como 'horarios', 'accesorios', 'sucursal', 'pago', 'productos', o 'contacto'."
+  };
+
+  let contexto = "";
+
+  function mostrarMensaje(message, sender = 'bot', imagen = null) {
+    const chatbox = document.getElementById('chatbox');
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('p-2', 'rounded-md', 'mb-2', 'flex', 'items-start');
+
+    if (sender === 'bot') {
+      const container = document.createElement('div');
+      container.classList.add('flex', 'flex-col', 'items-center', 'mr-3');
+
+      const img = document.createElement('img');
+      img.src = 'Blake.png';
+      img.alt = 'Blake';
+      img.classList.add('bot-img');
+
+      const name = document.createElement('p');
+      name.classList.add('bot-name');
+      name.textContent = 'Blake';
+
+      const text = document.createElement('div');
+      text.classList.add('bg-gray-200', 'text-gray-800', 'p-3', 'rounded-lg', 'animate-fade-in');
+      text.innerHTML = message;
+
+      if (imagen) {
+        const pic = document.createElement('img');
+        pic.src = imagen;
+        pic.classList.add('mt-2', 'w-28', 'rounded-md', 'shadow');
+        text.appendChild(pic);
+      }
+
+      container.appendChild(img);
+      container.appendChild(name);
+      msgDiv.appendChild(container);
+      msgDiv.appendChild(text);
+    } else {
+      msgDiv.classList.add('justify-end');
+      msgDiv.innerHTML = `<div class="bg-green-200 text-black p-2 rounded-md animate-fade-in">Tú: ${message}</div>`;
+    }
+
+    chatbox.appendChild(msgDiv);
+    chatbox.scrollTop = chatbox.scrollHeight;
+  }
+
+  function mostrarOpciones(opciones) {
+    const chatbox = document.getElementById('chatbox');
+    const container = document.createElement('div');
+    container.classList.add('flex', 'gap-2', 'flex-wrap', 'mt-2');
+
+    opciones.forEach(op => {
+      const btn = document.createElement('button');
+      btn.textContent = op.texto;
+      btn.className = "px-4 py-2 bg-black text-white text-sm rounded hover:bg-gray-800 transition";
+      btn.onclick = () => {
+        mostrarMensaje(op.texto, 'user');
+        obtenerRespuesta(op.accion).then(res => {
+          if (res.tipo === "respuesta") {
+            mostrarMensaje(res.texto, 'bot', res.imagen);
+          }
+        });
+      };
+      container.appendChild(btn);
+    });
+
+    chatbox.appendChild(container);
+    chatbox.scrollTop = chatbox.scrollHeight;
+  }
+
+  async function obtenerRespuesta(mensaje) {
+    const msg = mensaje.toLowerCase();
+
+    if (msg.includes("sí") || msg.includes("claro") || msg.includes("dale")) {
+      if (contexto === "pago") {
+        return {
+          tipo: "respuesta",
+          texto: "💳 Datos de transferencia:<br><br>Banco: BBVA<br>Cuenta: 0123456789<br>Nombre: Blacks Boutique<br>CLABE: 012345678901234567<br><br>Envíanos comprobante por Instagram 📸."
+        };
+      }
+    }
+
+    if (msg.includes("horario")) return { tipo: "respuesta", texto: respuestas.horario };
+    if (msg.includes("accesorio")) return { tipo: "respuesta", texto: respuestas.accesorios, imagen: "categorias img/ropaM.jpg" };
+    if (msg.includes("sucursal")) return { tipo: "respuesta", texto: respuestas.sucursal };
+    if (msg.includes("sur")) return { tipo: "respuesta", texto: respuestas.sucursalSur };
+    if (msg.includes("norte")) return { tipo: "respuesta", texto: respuestas.sucursalNorte };
+    if (msg.includes("central")) return { tipo: "respuesta", texto: respuestas.sucursalCentral };
+    if (msg.includes("pago")) {
+      contexto = "pago";
+      return { tipo: "respuesta", texto: respuestas.pago };
+    }
+    if (msg.includes("contacto")) return { tipo: "respuesta", texto: respuestas.contacto };
+    if (msg.includes("producto")) {
+      const productos = JSON.parse(localStorage.getItem("productos") || "[]");
+      if (productos.length > 0) {
+        const prod = productos[0];
+        return {
+          tipo: "respuesta",
+          texto: `🛒 Uno de nuestros destacados: ${prod.nombre} - $${prod.precio}`,
+          imagen: prod.imagen
+        };
+      }
+    }
+
+    contexto = "";
+    return { tipo: "respuesta", texto: respuestas.error };
+  }
+
+  async function enviarMensaje() {
+    const userInput = document.getElementById('userInput');
+    const mensaje = userInput.value.trim();
+    if (!mensaje) return;
+
+    mostrarMensaje(mensaje, 'user');
+    const res = await obtenerRespuesta(mensaje);
+    if (res.tipo === "respuesta") {
+      mostrarMensaje(res.texto, 'bot', res.imagen);
+    }
+    userInput.value = '';
+  }
+
+  window.onload = () => {
+    mostrarMensaje(respuestas.saludo);
+    mostrarOpciones([
+      { texto: "🕒 Horarios", accion: "horario" },
+      { texto: "🎁 Accesorios", accion: "accesorios" },
+      { texto: "📍 Sucursales", accion: "sucursal" },
+      { texto: "💳 Pago", accion: "pago" },
+      { texto: "📞 Contacto", accion: "contacto" }
+    ]);
+  };
+</script>
+
+
+
+
+    <footer class="bg-gray-200 text-gray-700 py-12 px-6 sm:px-12 w-full border-t border-gray-400 mt-12">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+            <!-- Sección 1: Información de la tienda -->
+            <div class="space-y-4">
+                <h2 class="text-xl font-bold text-black">Blacks Boutique</h2>
+                <p class="text-sm">Tu tienda de moda exclusiva, ofreciendo las últimas tendencias y productos únicos para ti.</p>
+            </div>
+      
+            <!-- Sección 2: Enlaces de navegación -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-semibold text-black">Enlaces rápidos</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="inicio.html" class="hover:text-gray-500 transition duration-200">Inicio</a></li>
+                    
+                    <li><a href="Mapa.html" class="hover:text-gray-500 transition duration-200">Mapa</a></li>
+                </ul>
+            </div>
+      
+            <!-- Sección 3: Redes sociales -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-semibold text-black">Síguenos </h3>
+                <div class="flex justify-center md:justify-start space-x-6">
+                    <a href="#" class="text-black hover:text-gray-700 transition duration-200">
+                        <i class="fab fa-facebook-f text-2xl"></i>
+                    </a>
+                    <a href="#" class="text-black hover:text-gray-700 transition duration-200">
+                        <i class="fab fa-instagram text-2xl"></i>
+                    </a>
+                    <a href="#" class="text-black hover:text-gray-700 transition duration-200">
+                        <i class="fab fa-whatsapp text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+      
+        <!-- Línea separadora -->
+        <div class="mt-8 border-t border-gray-300"></div>
+      
+        <div class="mt-4 text-center">
+            <p class="text-sm text-gray-500">&copy; 2025 Blacks Boutique. Todos los derechos reservados.</p>
+        </div>
+      </footer>
+
+</body>
+</html>

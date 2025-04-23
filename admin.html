@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" href="logo.ico">
+  <title>Admin - Añadir Producto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<style>
+    .fade-out {
+      opacity: 0;
+      transform: scale(0.95);
+      transition: all 0.3s ease;
+    }
+  
+    .fade-in {
+      opacity: 1;
+      transform: scale(1);
+      transition: all 0.3s ease;
+    }
+  </style>
+  
+  <body class="bg-gray-100 min-h-screen p-6 pt-20">
+
+
+
+    <nav class="bg-white shadow-sm fixed top-0 left-0 right-0 z-50">
+      <div class="max-w-4xl mx-auto px-6">
+    
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="text-2xl font-bold tracking-wide text-black">
+          BLACKS BOUTIQUE
+        </div>
+  
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-8 text-black text-sm font-medium">
+          <a href="inicio.html" class="hover:text-gray-600 transition">Ir a Inicio</a>
+          
+        </div>
+  
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+          <button id="menu-btn" class="text-black focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-black text-sm font-medium">
+      <a href="inicio.html" class="block hover:text-gray-600 transition">Ir a Inicio</a>
+    </div>
+  </nav>
+
+  
+  <div class="max-w-4xl mx-auto">
+    <!-- FORMULARIO -->
+    <div class="bg-white shadow-md rounded-lg p-6 mb-10">
+      <h2 class="text-2xl font-semibold mb-6 text-center">Añadir o editar producto</h2>
+      <form id="productForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <select name="categoria" required class="w-full border rounded px-3 py-2">
+            <option value="" disabled selected>¿A qué categoría pertenece?</option>
+            <option value="Inicio">Inicio</option>
+            <option value="hombre">Ropa de Hombre</option>
+            <option value="mujer">Ropa de Mujer</option>
+            <option value="accesorios">Accesorios</option>
+            <option value="interiores">Ropa Interior</option>
+          </select>
+          
+        
+          
+        <input type="text" name="nombre" placeholder="Nombre del producto" required class="w-full border rounded px-3 py-2"/>
+        <textarea name="descripcion" placeholder="Descripción" required class="w-full border rounded px-3 py-2 md:col-span-2"></textarea>
+        <input type="number" name="precio" step="0.01" placeholder="Precio" required class="w-full border rounded px-3 py-2"/>
+        <input type="text" name="color" placeholder="Color" required class="w-full border rounded px-3 py-2"/>
+        <input type="text" name="tallas" placeholder="Tallas (ej: S,M,L)" required class="w-full border rounded px-3 py-2"/>
+        <input type="file" id="imagen" accept="image/*" class="w-full md:col-span-2"/>
+        <img id="preview" src="" class="hidden w-32 h-32 object-cover mt-2 rounded md:col-span-2"/>
+        <label class="flex items-center gap-2 md:col-span-2">
+            <input type="checkbox" name="destacado" class="h-4 w-4">
+            <span>¿Marcar como producto destacado?</span>
+          </label>
+          
+        <button type="submit" class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 md:col-span-2">
+          Guardar producto
+        </button>
+
+
+        <button onclick="localStorage.removeItem('productos'); location.reload();" class="bg-red-700 text-white px-4 py-2 rounded mt-4">
+          Borrar todos los productos
+        </button>
+        
+      </form>
+    </div>
+
+
+
+    <label for="filtro-categoria" class="block mb-2 font-semibold text-gray-700">¿Qué productos deseas ver?</label>
+<select id="filtro-categoria" class="mb-6 w-full border border-gray-300 rounded-md p-2">
+  <option value="todos">Todos los productos</option>
+  <option value="destacados">Destacados</option>
+  <option value="hombre">Ropa de Hombre</option>
+  <option value="mujer">Ropa de Mujer</option>
+  <option value="accesorios">Accesorios</option>
+  <option value="interiores">Ropa Interior</option>
+</select>
+
+
+    <!-- PRODUCTOS -->
+    <div>
+      <h3 class="text-xl font-semibold mb-4 text-center">Productos existentes</h3>
+      <div id="productos-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </div>
+  </div>
+
+  <script>
+    // Menu móvil
+    document.getElementById("menu-btn").addEventListener("click", () => {
+      document.getElementById("mobile-menu").classList.toggle("hidden");
+    });
+  
+    const form = document.getElementById("productForm");
+    const preview = document.getElementById("preview");
+    const imagenInput = document.getElementById("imagen");
+    const filtroCategoria = document.getElementById("filtro-categoria");
+    const contenedor = document.getElementById("productos-container");
+  
+    let indexEditar = null;
+    let imagenBase64 = "";
+  
+    imagenInput.addEventListener("change", () => {
+      const file = imagenInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          preview.src = reader.result;
+          preview.classList.remove("hidden");
+          imagenBase64 = reader.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      let productos = JSON.parse(localStorage.getItem("productos")) || [];
+  
+      const imagenFinal = imagenBase64 || (indexEditar !== null ? productos[indexEditar].imagen : "");
+  
+      const producto = {
+        nombre: formData.get("nombre"),
+        descripcion: formData.get("descripcion"),
+        precio: formData.get("precio"),
+        color: formData.get("color"),
+        tallas: formData.get("tallas"),
+        categoria: formData.get("categoria"),
+        imagen: imagenFinal,
+        destacado: formData.get("destacado") === "on"
+      };
+  
+      if (indexEditar !== null) {
+        productos[indexEditar] = producto;
+        indexEditar = null;
+      } else {
+        productos.push(producto);
+      }
+  
+      localStorage.setItem("productos", JSON.stringify(productos));
+  
+      // ALERTA animada con SweetAlert2
+      Swal.fire({
+        icon: 'success',
+        title: '¡Guardado!',
+        text: 'El producto se ha guardado correctamente.',
+        timer: 2000,
+        showConfirmButton: false
+      });
+  
+      form.reset();
+      preview.classList.add("hidden");
+      imagenBase64 = "";
+      mostrarProductosFiltrados(filtroCategoria.value);
+    });
+  
+    function mostrarProductosFiltrados(filtro) {
+      const productos = JSON.parse(localStorage.getItem("productos")) || [];
+      contenedor.classList.add("fade-out");
+  
+      setTimeout(() => {
+        contenedor.innerHTML = "";
+  
+        let hayResultados = false;
+  
+        productos.forEach((producto, realIndex) => {
+          const cumpleFiltro =
+            filtro === "todos" ||
+            (filtro === "destacados" && producto.destacado) ||
+            producto.categoria === filtro;
+  
+          if (cumpleFiltro) {
+            hayResultados = true;
+            const card = document.createElement("div");
+            card.className = "bg-white rounded-lg shadow-md overflow-hidden flex flex-col";
+  
+            card.innerHTML = `
+              <img src="${producto.imagen}" alt="${producto.nombre}" class="w-full h-48 object-cover">
+              <div class="p-4 flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 class="text-lg font-bold text-gray-800 mb-1">${producto.nombre}</h3>
+                  <p class="text-gray-600 text-sm mb-1">${producto.descripcion}</p>
+                  <p class="text-gray-800 font-semibold">$${producto.precio}</p>
+                  <p class="text-sm">Color: ${producto.color}</p>
+                  <p class="text-sm mb-3">Tallas: ${producto.tallas}</p>
+                </div>
+                <div class="flex gap-2 mt-4">
+                  <button class="editar-btn w-1/2 bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded" data-index="${realIndex}">Editar</button>
+                  <button class="eliminar-btn w-1/2 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded" data-index="${realIndex}">Eliminar</button>
+                </div>
+              </div>
+            `;
+  
+            contenedor.appendChild(card);
+          }
+        });
+  
+        if (!hayResultados) {
+          contenedor.innerHTML = `<p class="col-span-3 text-gray-400 text-center">No hay productos en esta categoría.</p>`;
+        }
+  
+        contenedor.classList.remove("fade-out");
+        contenedor.classList.add("fade-in");
+  
+        document.querySelectorAll('.editar-btn').forEach(btn => {
+          btn.addEventListener('click', () => editarProducto(parseInt(btn.dataset.index)));
+        });
+  
+        document.querySelectorAll('.eliminar-btn').forEach(btn => {
+          btn.addEventListener('click', () => eliminarProducto(parseInt(btn.dataset.index)));
+        });
+      }, 200);
+    }
+  
+    function eliminarProducto(index) {
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡Esta acción no se puede deshacer!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#aaa',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let productos = JSON.parse(localStorage.getItem("productos")) || [];
+          productos.splice(index, 1);
+          localStorage.setItem("productos", JSON.stringify(productos));
+          mostrarProductosFiltrados(filtroCategoria.value);
+  
+          Swal.fire({
+            icon: 'success',
+            title: 'Eliminado',
+            text: 'El producto fue eliminado.',
+            timer: 1500,
+            showConfirmButton: false
+          });
+        }
+      });
+    }
+  
+    function editarProducto(index) {
+      const productos = JSON.parse(localStorage.getItem("productos")) || [];
+      const producto = productos[index];
+  
+      form.nombre.value = producto.nombre;
+      form.descripcion.value = producto.descripcion;
+      form.precio.value = producto.precio;
+      form.color.value = producto.color;
+      form.tallas.value = producto.tallas;
+      form.categoria.value = producto.categoria;
+      form.destacado.checked = producto.destacado || false;
+      preview.src = producto.imagen;
+      preview.classList.remove("hidden");
+      imagenBase64 = producto.imagen;
+      indexEditar = index;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  
+    filtroCategoria.addEventListener('change', (e) => {
+      mostrarProductosFiltrados(e.target.value);
+    });
+  
+    window.addEventListener("DOMContentLoaded", () => {
+      mostrarProductosFiltrados("todos");
+    });
+  </script>
+  
+  
+  
+</body>
+</html>

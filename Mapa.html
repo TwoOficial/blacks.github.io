@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mapa de Sucursales - BLACKS BOUTIQUE</title>
+  <link rel="icon" type="image/png" href="logo.ico">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    #map {
+      height: 500px;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-black pt-20">
+
+  <!-- NAV -->
+  <nav class="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="text-2xl font-semibold tracking-wide text-black">
+          BLACKS BOUTIQUE
+        </div>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-8 text-black text-sm font-medium">
+          <a href="inicio.html" class="hover:text-gray-600 transition">Inicio</a>
+          <a href="mapa.html" class="hover:text-gray-600 transition font-semibold underline">Mapa</a>
+
+          <!-- 🛒 Carrito Desktop -->
+          <a href="carrito.html" class="relative hover:text-black" id="carrito-nav">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span id="carrito-count" class="absolute -top-2 -right-3 bg-black text-white text-xs px-1.5 py-0.5 rounded-full">0</span>
+          </a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+          <button id="menu-btn" class="text-black focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-black text-sm font-medium">
+      <a href="inicio.html" class="block hover:text-gray-600 transition">Inicio</a>
+      <a href="mapa.html" class="block hover:text-gray-600 transition font-semibold underline">Mapa</a>
+      <!-- 🛒 Carrito Mobile -->
+      <a href="carrito.html" class="relative inline-block hover:text-black" id="carrito-nav-mobile">
+        <i class="fas fa-shopping-cart text-xl"></i>
+        <span id="carrito-count-mobile" class="absolute -top-2 -right-3 bg-black text-white text-xs px-1.5 py-0.5 rounded-full">0</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- CONTENIDO -->
+  <div class="max-w-4xl mx-auto p-6">
+    <h1 class="text-3xl font-bold text-center mb-6">Ubicación de Nuestras Sucursales</h1>
+    <div id="map" class="rounded-lg shadow-lg z-10 relative"></div>
+  </div>
+
+  <!-- Leaflet -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    window.onload = function () {
+      const map = L.map('map').setView([19.432608, -99.133209], 12);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      const sucursales = [
+        { name: "Sucursal Centro", lat: 19.432608, lon: -99.133209 },
+        { name: "Sucursal Norte", lat: 19.452608, lon: -99.123209 },
+        { name: "Sucursal Sur", lat: 19.412608, lon: -99.153209 }
+      ];
+
+      sucursales.forEach(sucursal => {
+        L.marker([sucursal.lat, sucursal.lon]).addTo(map)
+          .bindPopup(`<b>${sucursal.name}</b>`);
+      });
+    };
+
+    // Toggle menú móvil
+    document.getElementById("menu-btn").addEventListener("click", () => {
+      document.getElementById("mobile-menu").classList.toggle("hidden");
+    });
+  </script>
+
+  <footer class="bg-gray-200 text-gray-700 py-12 px-6 sm:px-12 w-full border-t border-gray-400 mt-12">
+    <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+        <!-- Sección 1: Información de la tienda -->
+        <div class="space-y-4">
+            <h2 class="text-xl font-bold text-black">Blacks Boutique</h2>
+            <p class="text-sm">Tu tienda de moda exclusiva, ofreciendo las últimas tendencias y productos únicos para ti.</p>
+        </div>
+  
+        <!-- Sección 2: Enlaces de navegación -->
+        <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-black">Enlaces rápidos</h3>
+            <ul class="space-y-2 text-sm">
+                <li><a href="inicio.html" class="hover:text-gray-500 transition duration-200">Inicio</a></li>
+                <li><a href="Mapa.html" class="hover:text-gray-500 transition duration-200">Mapa</a></li>
+            </ul>
+        </div>
+  
+        <!-- Sección 3: Redes sociales -->
+        <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-black">Síguenos </h3>
+            <div class="flex justify-center md:justify-start space-x-6">
+                <a href="#" class="text-black hover:text-gray-700 transition duration-200">
+                    <i class="fab fa-facebook-f text-2xl"></i>
+                </a>
+                <a href="#" class="text-black hover:text-gray-700 transition duration-200">
+                    <i class="fab fa-instagram text-2xl"></i>
+                </a>
+                <a href="#" class="text-black hover:text-gray-700 transition duration-200">
+                    <i class="fab fa-whatsapp text-2xl"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+  
+    <!-- Línea separadora -->
+    <div class="mt-8 border-t border-gray-300"></div>
+  
+    <div class="mt-4 text-center">
+        <p class="text-sm text-gray-500">&copy; 2025 Blacks Boutique. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+  
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" href="logo.ico">
+  <title>Carrito - BLACKS BOUTIQUE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="bg-gray-100">
+
+
+  <!-- Navbar -->
+<nav class="bg-white shadow-md">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+
+      <!-- Logo -->
+      <div class="text-2xl font-semibold tracking-wide text-black">
+        BLACKS BOUTIQUE
+      </div>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center space-x-8 text-black text-sm font-medium">
+        <a href="inicio.html" class="hover:text-gray-600 transition">Inicio</a>
+        <a href="mapa.html" class="hover:text-gray-600 transition">Mapa</a>
+
+        <!-- 🛒 Carrito Desktop -->
+        <a href="carrito.html" class="relative hover:text-black" id="carrito-nav">
+          <i class="fas fa-shopping-cart text-xl"></i>
+          <span id="carrito-count" class="absolute -top-2 -right-3 bg-black text-white text-xs px-1.5 py-0.5 rounded-full">0</span>
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden">
+        <button id="menu-btn" class="text-black focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-black text-sm font-medium">
+    <a href="inicio.html" class="block hover:text-gray-600 transition">Inicio</a>
+    <a href="mapa.html" class="block hover:text-gray-600 transition">Mapa</a>
+
+    <!-- 🛒 Carrito Mobile -->
+    <a href="carrito.html" class="relative inline-block hover:text-black" id="carrito-nav-mobile">
+      <i class="fas fa-shopping-cart text-xl"></i>
+      <span id="carrito-count-mobile" class="absolute -top-2 -right-3 bg-black text-white text-xs px-1.5 py-0.5 rounded-full">0</span>
+    </a>
+  </div>
+</nav>
+
+
+<!-- Burbuja flotante con enlace -->
+<a href="chatbot.html" id="blake-bubble" class="fixed bottom-16 right-6 sm:bottom-20 sm:right-10">
+  <div class="bubble relative">
+      <p class="text-white text-sm text-center">¡Hola! Soy Blake.<br>Estoy para ayudarte</p>
+      <div class="bubble-tail"></div>
+  </div>
+  <img src="Blake.png" alt="Blake" class="bot-avatar">
+</a>
+
+  <section class="max-w-4xl mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold text-center mb-6">Tu carrito</h2>
+
+    <div id="carrito-container" class="grid grid-cols-1 gap-6 mb-8"></div>
+
+    <button id="btn-whatsapp"
+      class="btn-ws w-full text-center"
+      style="display: none;">
+      <i class="fab fa-whatsapp"></i> Enviar pedido por WhatsApp
+    </button>
+  </section>
+
+  <style>
+
+     /* Contenedor principal alineado */
+#blake-bubble {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  position: fixed;
+  bottom: 16px;
+  right: 20px;
+  animation: bounce 1.5s infinite ease-in-out;
+}
+
+/* Estilos de la burbuja de texto */
+.bubble {
+  background: black;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 20px;
+  text-align: center;
+  width: max-content;
+  max-width: 200px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Punta de la burbuja */
+.bubble-tail {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+/* Imagen del avatar */
+.bot-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-top: 10px;
+}
+    .btn-ws {
+      animation: fadeInUp 0.6s ease-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background-color: #000;
+      color: white;
+      font-weight: 600;
+      padding: 12px;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      font-size: 16px;
+    }
+    .btn-ws:hover {
+      background-color: #333;
+      transform: scale(1.03);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+    }
+    .btn-ws i {
+      font-size: 20px;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+
+  <script>
+    const btn = document.getElementById('menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    if (btn && menu) {
+      btn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+      });
+    }
+    const contenedor = document.getElementById("carrito-container");
+    const btnWhatsapp = document.getElementById("btn-whatsapp");
+
+    function cargarCarrito() {
+      const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+      contenedor.innerHTML = "";
+    
+      if (carrito.length === 0) {
+        contenedor.innerHTML = `<p class="text-center text-gray-500 col-span-1">Tu carrito está vacío 🛒</p>`;
+        btnWhatsapp.style.display = "none";
+        return;
+      }
+    
+      carrito.forEach((producto, index) => {
+        const div = document.createElement("div");
+        div.className = "bg-white rounded-lg shadow-md p-4";
+    
+        // Usamos datos dinámicos dependiendo de cómo fue agregado
+        const colores = producto.color
+          ? producto.color.split(',').map(c => c.trim())
+          : [producto.colorSeleccionado || "N/A"];
+    
+        const tallas = producto.tallas
+          ? producto.tallas.split(',').map(t => t.trim())
+          : [producto.tallaSeleccionada || "N/A"];
+    
+        div.innerHTML = `
+          <div class="flex gap-4 items-center mb-4">
+            <img src="${producto.imagen}" class="w-24 h-24 object-contain rounded border" />
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold">${producto.nombre || "Sin nombre"}</h3>
+              <p class="text-sm text-gray-500">${producto.descripcion || ""}</p>
+              <p class="text-red-600 font-bold">$${producto.precio || "0"}</p>
+              <div class="flex gap-2 mt-2">
+                <select class="color-select border rounded p-1 text-sm">
+  ${colores.map(color => `
+    <option value="${color}" ${color === producto.colorSeleccionado ? 'selected' : ''}>${color}</option>
+  `).join("")}
+</select>
+
+<select class="talla-select border rounded p-1 text-sm">
+  ${tallas.map(talla => `
+    <option value="${talla}" ${talla === producto.tallaSeleccionada ? 'selected' : ''}>${talla}</option>
+  `).join("")}
+</select>
+
+              </div>
+            </div>
+            <button class="eliminar-btn text-red-500 hover:text-red-700 text-xl ml-2" data-index="${index}">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        `;
+    
+        contenedor.appendChild(div);
+      });
+    
+      btnWhatsapp.style.display = "block";
+    
+      // Botón eliminar
+      document.querySelectorAll(".eliminar-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const index = parseInt(btn.dataset.index);
+          eliminarDelCarrito(index);
+        });
+      });
+    }
+    
+    function eliminarDelCarrito(index) {
+      let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+      carrito.splice(index, 1);
+      localStorage.setItem("carrito", JSON.stringify(carrito));
+      cargarCarrito();
+    }
+
+    btnWhatsapp.addEventListener("click", () => {
+      const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+      const selectsColor = document.querySelectorAll(".color-select");
+      const selectsTalla = document.querySelectorAll(".talla-select");
+
+      const mensaje = carrito.map((producto, i) => {
+        const color = selectsColor[i].value;
+        const talla = selectsTalla[i].value;
+        return `- ${producto.nombre}\n  Color: ${color}\n  Talla: ${talla}\n  Precio: $${producto.precio}`;
+      }).join("\n\n");
+
+      const textoFinal = `Hola, quiero pedir los siguientes productos:\n\n${mensaje}`;
+      const url = `https://wa.me/524431861014?text=${encodeURIComponent(textoFinal)}`;
+      window.open(url, "_blank");
+    });
+
+    window.addEventListener("DOMContentLoaded", cargarCarrito);
+  </script>
+
+  <footer class="bg-gray-200 text-gray-700 py-12 px-6 sm:px-12 w-full border-t border-gray-400 mt-12">
+    <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+        <!-- Sección 1: Información de la tienda -->
+        <div class="space-y-4">
+            <h2 class="text-xl font-bold text-black">Blacks Boutique</h2>
+            <p class="text-sm">Tu tienda de moda exclusiva, ofreciendo las últimas tendencias y productos únicos para ti.</p>
+        </div>
+  
+        <!-- Sección 2: Enlaces de navegación -->
+        <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-black">Enlaces rápidos</h3>
+            <ul class="space-y-2 text-sm">
+                <li><a href="inicio.html" class="hover:text-gray-500 transition duration-200">Inicio</a></li>
+               
+                <li><a href="Mapa.html" class="hover:text-gray-500 transition duration-200">Mapa</a></li>
+            </ul>
+        </div>
+  
+        <!-- Sección 3: Redes sociales -->
+        <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-black">Síguenos </h3>
+            <div class="flex justify-center md:justify-start space-x-6">
+                <a href="#" class="text-black hover:text-gray-700 transition duration-200">
+                    <i class="fab fa-facebook-f text-2xl"></i>
+                </a>
+                <a href="#" class="text-black hover:text-gray-700 transition duration-200">
+                    <i class="fab fa-instagram text-2xl"></i>
+                </a>
+                <a href="#" class="text-black hover:text-gray-700 transition duration-200">
+                    <i class="fab fa-whatsapp text-2xl"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+  
+    <!-- Línea separadora -->
+    <div class="mt-8 border-t border-gray-300"></div>
+  
+    <div class="mt-4 text-center">
+        <p class="text-sm text-gray-500">&copy; 2025 Blacks Boutique. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>

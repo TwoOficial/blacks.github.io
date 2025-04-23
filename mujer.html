@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" href="logo.ico">
+  <title>BLACKS BOUTIQUE - Ropa de Mujer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<style>
+   /* Contenedor principal alineado */
+#blake-bubble {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  position: fixed;
+  bottom: 16px;
+  right: 20px;
+  animation: bounce 1.5s infinite ease-in-out;
+}
+
+/* Estilos de la burbuja de texto */
+.bubble {
+  background: black;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 20px;
+  text-align: center;
+  width: max-content;
+  max-width: 200px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Punta de la burbuja */
+.bubble-tail {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+/* Imagen del avatar */
+.bot-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-top: 10px;
+}
+</style>
+<body class="bg-gray-100">
+
+
+     <!-- Navbar -->
+<nav class="bg-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+  
+        <!-- Logo -->
+        <div class="text-2xl font-semibold tracking-wide text-black">
+          BLACKS BOUTIQUE
+        </div>
+  
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-8 text-black text-sm font-medium">
+          <a href="inicio.html" class="hover:text-gray-600 transition">Inicio</a>
+          <a href="mapa.html" class="hover:text-gray-600 transition">Mapa</a>
+  
+          <!-- 🛒 Carrito Desktop -->
+          <a href="carrito.html" class="relative hover:text-black" id="carrito-nav">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span id="carrito-count" class="absolute -top-2 -right-3 bg-black text-white text-xs px-1.5 py-0.5 rounded-full">0</span>
+          </a>
+        </div>
+  
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+          <button id="menu-btn" class="text-black focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-black text-sm font-medium">
+      <a href="inicio.html" class="block hover:text-gray-600 transition">Inicio</a>
+      <a href="mapa.html" class="block hover:text-gray-600 transition">Mapa</a>
+  
+      <!-- 🛒 Carrito Mobile -->
+      <a href="carrito.html" class="relative inline-block hover:text-black" id="carrito-nav-mobile">
+        <i class="fas fa-shopping-cart text-xl"></i>
+        <span id="carrito-count-mobile" class="absolute -top-2 -right-3 bg-black text-white text-xs px-1.5 py-0.5 rounded-full">0</span>
+      </a>
+    </div>
+  </nav>
+
+
+
+  <!-- Burbuja flotante con enlace -->
+<a href="chatbot.html" id="blake-bubble" class="fixed bottom-16 right-6 sm:bottom-20 sm:right-10">
+  <div class="bubble relative">
+      <p class="text-white text-sm text-center">¡Hola! Soy Blake.<br>Estoy para ayudarte</p>
+      <div class="bubble-tail"></div>
+  </div>
+  <img src="Blake.png" alt="Blake" class="bot-avatar">
+</a>
+
+  <!-- Sección de productos -->
+  <section class="max-w-7xl mx-auto px-4 py-8">
+    <div class="mb-8">
+        <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">Luce con tu figura</h2>
+        <div class="w-20 h-1 bg-black rounded"></div>
+      </div>
+    <div id="productos-container" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
+  </section>
+
+  <!-- Modal de producto -->
+  <div id="modal-producto" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full relative">
+      <button id="cerrar-modal" class="absolute top-2 right-2 text-gray-500 hover:text-red-600 text-xl">&times;</button>
+      <img id="modal-imagen" src="" alt="" class="w-full h-48 object-cover rounded mb-4">
+      <h3 id="modal-nombre" class="text-xl font-bold text-gray-800 mb-2"></h3>
+      <p id="modal-descripcion" class="text-gray-600 text-sm mb-2"></p>
+      <p id="modal-precio" class="text-red-600 font-bold text-lg mb-4"></p>
+
+      <label for="select-color" class="text-sm font-medium text-gray-700">Color:</label>
+      <select id="select-color" class="mb-3 w-full border border-gray-300 rounded-md p-2"></select>
+
+      <label for="select-talla" class="text-sm font-medium text-gray-700">Talla:</label>
+      <select id="select-talla" class="mb-3 w-full border border-gray-300 rounded-md p-2"></select>
+
+      <button id="btn-agregar-carrito"
+        class="w-full bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded text-center transition">
+        <i class="fas fa-cart-plus mr-2"></i> Agregar al carrito
+      </button>
+    </div>
+
+
+  </div>
+
+  <script>
+    const btn = document.getElementById('menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    if (btn && menu) {
+      btn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+      });
+    }
+    function cargarProductosCategoria(categoria) {
+      const productos = JSON.parse(localStorage.getItem("productos")) || [];
+      const contenedor = document.getElementById("productos-container");
+      contenedor.innerHTML = '';
+
+      const filtrados = productos.filter(p => p.categoria === categoria);
+
+      if (filtrados.length === 0) {
+        contenedor.innerHTML = '<p class="text-center text-gray-500 col-span-4">No hay productos en esta categoría.</p>';
+        return;
+      }
+
+      filtrados.forEach(producto => {
+        const div = document.createElement('div');
+        div.className = "bg-white p-4 rounded shadow flex flex-col justify-between";
+        div.innerHTML = `
+          <img src="${producto.imagen}" alt="${producto.nombre}" class="w-full h-40 object-contain mb-2 rounded">
+          <h3 class="text-lg font-semibold">${producto.nombre}</h3>
+          <p class="text-sm text-gray-500">${producto.descripcion}</p>
+          <p class="text-red-600 font-bold mt-1">$${producto.precio}</p>
+          <button class="ver-mas w-full bg-black text-white text-xs py-2 rounded-md hover:bg-gray-800 mt-3 transition">Ver más</button>
+        `;
+
+        div.querySelector('.ver-mas').addEventListener('click', () => mostrarDetalles(producto));
+        contenedor.appendChild(div);
+      });
+    }
+
+    function mostrarDetalles(producto) {
+      const modal = document.getElementById('modal-producto');
+      modal.classList.remove('hidden');
+
+      document.getElementById('modal-imagen').src = producto.imagen;
+      document.getElementById('modal-nombre').textContent = producto.nombre;
+      document.getElementById('modal-descripcion').textContent = producto.descripcion;
+      document.getElementById('modal-precio').textContent = `$${producto.precio}`;
+
+      const selectColor = document.getElementById('select-color');
+      const selectTalla = document.getElementById('select-talla');
+
+      selectColor.innerHTML = '';
+      producto.color.split(',').map(c => c.trim()).forEach(color => {
+        const opt = document.createElement('option');
+        opt.value = color;
+        opt.textContent = color;
+        selectColor.appendChild(opt);
+      });
+
+      selectTalla.innerHTML = '';
+      producto.tallas.split(',').map(t => t.trim()).forEach(talla => {
+        const opt = document.createElement('option');
+        opt.value = talla;
+        opt.textContent = talla;
+        selectTalla.appendChild(opt);
+      });
+
+      const btnAgregar = document.getElementById('btn-agregar-carrito');
+      const nuevoBoton = btnAgregar.cloneNode(true);
+      btnAgregar.parentNode.replaceChild(nuevoBoton, btnAgregar);
+
+      nuevoBoton.addEventListener('click', () => {
+        const color = selectColor.value;
+        const talla = selectTalla.value;
+
+        const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+        carrito.push({
+          ...producto,
+          colorSeleccionado: color,
+          tallaSeleccionada: talla
+        });
+
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+        actualizarContadorCarrito();
+        alert("Producto agregado al carrito 🛒");
+        modal.classList.add('hidden');
+      });
+    }
+
+    document.getElementById('cerrar-modal').addEventListener('click', () => {
+      document.getElementById('modal-producto').classList.add('hidden');
+    });
+
+    document.getElementById('modal-producto').addEventListener('click', (e) => {
+      if (e.target.id === 'modal-producto') {
+        document.getElementById('modal-producto').classList.add('hidden');
+      }
+    });
+
+    function actualizarContadorCarrito() {
+      const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+      const total = carrito.length;
+
+      const contadorDesktop = document.getElementById("carrito-count");
+      const contadorMobile = document.getElementById("carrito-count-mobile");
+
+      if (contadorDesktop) {
+        contadorDesktop.textContent = total;
+        contadorDesktop.classList.add("animate-bounce");
+        setTimeout(() => contadorDesktop.classList.remove("animate-bounce"), 300);
+      }
+
+      if (contadorMobile) {
+        contadorMobile.textContent = total;
+        contadorMobile.classList.add("animate-bounce");
+        setTimeout(() => contadorMobile.classList.remove("animate-bounce"), 300);
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      cargarProductosCategoria("mujer");
+      actualizarContadorCarrito();
+    });
+  </script>
+  <footer class="bg-gray-200 text-gray-700 py-12 px-6 sm:px-12 w-full border-t border-gray-400 mt-12">
+    <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+        <!-- Sección 1: Información de la tienda -->
+        <div class="space-y-4">
+            <h2 class="text-xl font-bold text-black">Blacks Boutique</h2>
+            <p class="text-sm">Tu tienda de moda exclusiva, ofreciendo las últimas tendencias y productos únicos para ti.</p>
+        </div>
+  
+        <!-- Sección 2: Enlaces de navegación -->
+        <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-black">Enlaces rápidos</h3>
+            <ul class="space-y-2 text-sm">
+                <li><a href="inicio.html" class="hover:text-gray-500 transition duration-200">Inicio</a></li>
+                
+                <li><a href="Mapa.html" class="hover:text-gray-500 transition duration-200">Mapa</a></li>
+            </ul>
+        </div>
+  
+        <!-- Sección 3: Redes sociales -->
+        <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-black">Síguenos </h3>
+            <div class="flex justify-center md:justify-start space-x-6">
+                <a href="#" class="text-black hover:text-gray-700 transition duration-200">
+                    <i class="fab fa-facebook-f text-2xl"></i>
+                </a>
+                <a href="#" class="text-black hover:text-gray-700 transition duration-200">
+                    <i class="fab fa-instagram text-2xl"></i>
+                </a>
+                <a href="#" class="text-black hover:text-gray-700 transition duration-200">
+                    <i class="fab fa-whatsapp text-2xl"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+  
+    <!-- Línea separadora -->
+    <div class="mt-8 border-t border-gray-300"></div>
+  
+    <div class="mt-4 text-center">
+        <p class="text-sm text-gray-500">&copy; 2025 Blacks Boutique. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+  
+</body>
+</html>
